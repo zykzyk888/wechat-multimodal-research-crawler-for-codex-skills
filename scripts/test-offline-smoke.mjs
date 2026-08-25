@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const cli = path.join(root, 'bin', 'research-harvester.mjs');
 const fixture = path.join(root, 'examples', 'synthetic', 'wechat-article.html');
+const expectedVersion = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8')).version;
 
 function run(args) {
   return new Promise((resolve, reject) => {
@@ -31,7 +32,7 @@ try {
   assert.match(standardHelp.stdout, /Global options:/);
   const version = await run(['--version']);
   assert.equal(version.code, 0, version.stderr);
-  assert.equal(version.stdout.trim(), '0.1.0');
+  assert.equal(version.stdout.trim(), expectedVersion);
 
   const packaged = await run([
     'package-html', '--html', fixture,

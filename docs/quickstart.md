@@ -1,5 +1,7 @@
 # Quick start
 
+Prerequisites: Node.js `20.18.1` or newer and, for targeted Puppeteer fallback, an installed Chrome/Chromium. See the [platform support matrix](platform-support.md) for Windows, macOS, and Linux commands.
+
 ## 1. Choose an entry
 
 Use the Role for an end-to-end multi-article research request. Use the crawler Skill when scope and output are already defined. Use the image Skill when local images already exist.
@@ -96,19 +98,21 @@ node bin/research-harvester.mjs capture --input ./runs/seo-geo/sources.json --ou
 
 Use diagnostic routes for controlled comparison, not as the default way to quadruple every request.
 
-Puppeteer uses an installed Chrome. If automatic detection fails, pass `--chrome-path` or set `PUPPETEER_EXECUTABLE_PATH` for the current process. Do not commit machine paths.
+Puppeteer automatically checks standard Chrome locations on Windows, macOS, and Linux. If detection fails, pass `--chrome-path` or set `PUPPETEER_EXECUTABLE_PATH` for the current process. Do not commit machine paths.
 
 ## 7. Optional Crawl4AI sidecar
 
 Create an isolated Python environment, install the pinned optional range, and run:
 
 ```bash
-python skills/sp-pachong-seo-wenzhang-caiji/scripts/crawl4ai-adapter.py \
+python3 skills/sp-pachong-seo-wenzhang-caiji/scripts/crawl4ai-adapter.py \
   --input ./runs/seo-geo/sources.json \
   --output ./runs/seo-geo/crawl4ai-sidecar
 ```
 
 Crawl4AI output is sidecar evidence. It never replaces `article.json`.
+
+On Windows PowerShell, use `python` if `python3` is not registered.
 
 ## 8. Image understanding and finalization
 

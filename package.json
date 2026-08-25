@@ -1,11 +1,11 @@
 {
   "name": "wechat-multimodal-research-crawler-for-codex-skills",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Codex companion for public WeChat search, four-route crawling, multimodal packaging, and image knowledge extraction.",
   "license": "MIT",
   "engines": {
-    "node": ">=20"
+    "node": ">=20.18.1"
   },
   "scripts": {
     "setup": "npm ci --prefix skills/sp-pachong-seo-wenzhang-caiji/scripts",
@@ -13,10 +13,14 @@
     "check:runtime": "npm run check --prefix skills/sp-pachong-seo-wenzhang-caiji/scripts",
     "test:runtime": "npm test --prefix skills/sp-pachong-seo-wenzhang-caiji/scripts",
     "test:offline": "node scripts/test-offline-smoke.mjs",
+    "test:platform": "node scripts/test-platform-support.mjs",
     "validate:skills": "node scripts/validate-skills.mjs",
+    "validate:diagrams": "node scripts/validate-diagrams.mjs",
+    "validate:docs": "node scripts/validate-docs.mjs",
     "audit:public": "node scripts/audit-public-release.mjs",
-    "check": "npm run check:runtime && node --check bin/research-harvester.mjs && node --check scripts/validate-skills.mjs && node --check scripts/audit-public-release.mjs && node --check scripts/test-offline-smoke.mjs",
-    "test": "npm run test:runtime && npm run test:offline && npm run validate:skills && npm run audit:public",
+    "audit:history": "node scripts/audit-git-history.mjs",
+    "check": "npm run check:runtime && node --check bin/research-harvester.mjs && node --check scripts/public-release-policy.mjs && node --check scripts/audit-public-release.mjs && node --check scripts/audit-git-history.mjs && node --check scripts/test-offline-smoke.mjs && node --check scripts/test-platform-support.mjs && node --check scripts/validate-skills.mjs && node --check scripts/validate-diagrams.mjs && node --check scripts/validate-docs.mjs",
+    "test": "npm run test:runtime && npm run test:offline && npm run test:platform && npm run validate:skills && npm run validate:diagrams && npm run validate:docs && npm run audit:public && npm run audit:history",
     "ci": "npm run check && npm test"
   }
 }

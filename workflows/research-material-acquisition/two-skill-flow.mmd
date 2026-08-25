@@ -1,10 +1,3 @@
-# Two atomic Skills: responsibility-annotated flow
-
-Color and node prefixes both express ownership: blue `A` is article collection, green `B` is image understanding, orange `H` is the handoff contract. The machine source is `workflows/research-material-acquisition/two-skill-flow.mmd` in the public repository.
-
-<!-- two-skill-flow:start -->
-
-```mermaid
 flowchart TD
     subgraph LEGEND["图例｜颜色 + 前缀共同表达归属"]
         direction LR
@@ -52,17 +45,3 @@ flowchart TD
     classDef skillB fill:#EAF8F0,stroke:#16A34A,stroke-width:2px,color:#0F172A;
     classDef handoff fill:#FFF4D6,stroke:#D97706,stroke-width:2px,color:#0F172A;
     classDef external fill:#F3F4F6,stroke:#64748B,stroke-width:1.5px,color:#0F172A;
-```
-
-<!-- two-skill-flow:end -->
-
-## Single writers
-
-| Artifact | Sole writer |
-|---|---|
-| discovery, body, native tables, image registry/files | crawler Skill |
-| `vision-jobs.json` | crawler Skill |
-| `vision/<image_id>.analysis.json` | image Skill |
-| `analysis_ref` and final package state | crawler Skill |
-
-The outer Role owns batch contracts and acceptance but never becomes a second artifact writer.

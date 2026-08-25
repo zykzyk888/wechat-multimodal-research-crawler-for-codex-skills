@@ -1,0 +1,45 @@
+name: Feature request
+description: Propose a bounded capability or quality improvement.
+title: "feat: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Research outcome
+      description: What user outcome or failed quality dimension should improve?
+    validations:
+      required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Likely owner
+      options:
+        - Role orchestration
+        - A Skill article collection
+        - B Skill image understanding
+        - Handoff contract
+        - Documentation or tooling
+        - Unsure
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Minimal proposal and alternatives
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Synthetic or redacted evidence
+      description: Do not attach captured source material, signed URLs, credentials, personal data, or private paths.
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Boundaries
+      options:
+        - label: This proposal does not require login reuse, CAPTCHA bypass, private sources, or credentialed proxies.
+          required: true
+        - label: I considered whether an existing route or Skill contract can handle this without adding a new Role or Skill.
+          required: true

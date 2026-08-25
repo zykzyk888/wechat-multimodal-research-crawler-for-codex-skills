@@ -11,7 +11,7 @@ npm run setup
 npm run ci
 ```
 
-Node.js 20 or newer is required. On Windows PowerShell, use `npm.cmd` if `npm.ps1` is blocked.
+Node.js 20.18.1 or newer is required. On Windows PowerShell, use `npm.cmd` if `npm.ps1` is blocked. Platform-specific changes must pass the Windows, macOS Apple Silicon, macOS Intel, and Ubuntu CI matrix.
 
 ## Architecture rules
 
@@ -43,6 +43,7 @@ Explain why the existing stack cannot satisfy the requirement. Prefer the narrow
 ```bash
 npm audit --prefix skills/sp-pachong-seo-wenzhang-caiji/scripts
 npm run audit:public
+npm run audit:history
 npm run ci
 ```
 
@@ -55,5 +56,7 @@ Describe:
 - tests and exact evidence;
 - network, privacy, copyright, and compatibility impact;
 - remaining limits.
+
+Use the repository Issue and pull-request templates. Public submissions must contain only synthetic or redacted evidence; vulnerabilities and exploitable details belong in private vulnerability reporting.
 
 Do not claim production or current-source proof from offline tests alone.

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { assertSafeNetworkUrl, extractArticle, finalizePackage, packageArticle, sanitizeRedirectHeaders, validatePackage } from './pachong-seo.mjs';
+import { assertSafeNetworkUrl, chromeExecutableCandidates, extractArticle, finalizePackage, packageArticle, sanitizeRedirectHeaders, validatePackage } from './pachong-seo.mjs';
 
 const body = 'SEO 和 GEO 的研究需要保留正文、原生表格、信息型配图及其上下文。'.repeat(8);
 const html = `<!doctype html><html><head>
@@ -39,6 +39,16 @@ const crossOriginHeaders = sanitizeRedirectHeaders(sameOriginHeaders, 'https://w
 assert.equal(crossOriginHeaders.get('cookie'), null);
 assert.equal(crossOriginHeaders.get('authorization'), null);
 assert.equal(crossOriginHeaders.get('user-agent'), 'test');
+
+const explicitChrome = chromeExecutableCandidates({ explicitPath: '/custom/chrome', platform: 'darwin', env: {}, homeDir: '/Users/tester' });
+assert.equal(explicitChrome[0], '/custom/chrome');
+const macChrome = chromeExecutableCandidates({ platform: 'darwin', env: {}, homeDir: '/Users/tester' });
+assert.ok(macChrome.includes('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'));
+assert.ok(macChrome.includes('/Users/tester/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'));
+const linuxChrome = chromeExecutableCandidates({ platform: 'linux', env: {}, homeDir: '/home/tester' });
+assert.ok(linuxChrome.includes('/usr/bin/google-chrome'));
+const windowsChrome = chromeExecutableCandidates({ platform: 'win32', env: { LOCALAPPDATA: 'C:\\Users\\tester\\AppData\\Local' }, homeDir: 'C:\\Users\\tester' });
+assert.ok(windowsChrome.includes('C:\\Users\\tester\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe'));
 
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'pachong-seo-test-'));
 try {
@@ -99,7 +109,7 @@ try {
   delete invalidAnalysis.summary;
   await fs.writeFile(analysisPath, `${JSON.stringify(invalidAnalysis, null, 2)}\n`, 'utf8');
   await assert.rejects(() => finalizePackage(temporary), /Invalid image analysis/);
-  console.log(JSON.stringify({ passed: true, checks: 27, status: result.status }, null, 2));
+  console.log(JSON.stringify({ passed: true, checks: 32, status: result.status }, null, 2));
 } finally {
   await fs.rm(temporary, { recursive: true, force: true });
 }

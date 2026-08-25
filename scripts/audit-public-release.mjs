@@ -2,29 +2,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { contentScanExclusions, excludedDirectories, inspectPublicPath, inspectSensitiveText, normalizeRelative, requiredFiles, textExtensions } from './public-release-policy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const runtimeRoot = path.join(root, 'skills', 'sp-pachong-seo-wenzhang-caiji', 'scripts');
-const excludedDirectories = new Set(['.git', 'node_modules', '.tmp', 'runs', 'output', '__pycache__']);
-const requiredFiles = [
-  'README.md', 'LICENSE', 'SECURITY.md', 'CONTRIBUTING.md', 'package.json',
-  'docs/architecture.md', 'docs/benchmark-report-2026-08-25.md', 'docs/compliance.md',
-  'skills/sp-role-pachong-ziliao-sousuo-caiji-expert/SKILL.md',
-  'skills/sp-pachong-seo-wenzhang-caiji/SKILL.md',
-  'skills/sp-tupian-lijie-xinxi-tiqu/SKILL.md',
-  'workflows/research-material-acquisition/workflow.mmd',
-];
-
-const textExtensions = new Set(['.md', '.mjs', '.js', '.json', '.yaml', '.yml', '.py', '.txt', '.html', '.gitattributes', '.gitignore']);
-const sensitivePatterns = [
-  ['private Windows path', /(?:^|[\s"'`(])(?:[A-Za-z]:\\[^\\\r\n]+\\|C:\/Users\/|D:\/cursorfile\/|file:\/\/\/[A-Za-z]:\/)/im],
-  ['GitHub token', /(?:ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,})/],
-  ['OpenAI-style secret', /\bsk-(?:proj-)?[A-Za-z0-9_-]{20,}\b/],
-  ['AWS access key', /\bAKIA[0-9A-Z]{16}\b/],
-  ['private key', /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
-  ['bearer credential', /Authorization\s*:\s*Bearer\s+[A-Za-z0-9._-]{12,}/i],
-  ['non-noreply email', /\b[A-Z0-9._%+-]+@(?!users\.noreply\.github\.com\b)[A-Z0-9.-]+\.[A-Z]{2,}\b/i],
-];
 
 async function exists(file) {
   try { await fs.access(file); return true; } catch { return false; }
@@ -46,14 +27,14 @@ for (const relative of requiredFiles) assert.ok(await exists(path.join(root, rel
 const findings = [];
 const files = await walk(root);
 for (const file of files) {
-  const relative = path.relative(root, file).replaceAll('\\', '/');
+  const relative = normalizeRelative(root, file);
   const stat = await fs.stat(file);
-  if (stat.size > 1_000_000) findings.push(`${relative}: file exceeds 1 MB`);
-  if (relative === 'scripts/audit-public-release.mjs') continue;
+  for (const finding of inspectPublicPath(relative, stat.size)) findings.push(`${relative}: ${finding}`);
+  if (contentScanExclusions.has(relative)) continue;
   const extension = path.extname(file).toLowerCase();
   if (!textExtensions.has(extension) && !['LICENSE', 'README', '.gitignore', '.gitattributes'].includes(path.basename(file))) continue;
   const content = await fs.readFile(file, 'utf8');
-  for (const [label, pattern] of sensitivePatterns) if (pattern.test(content)) findings.push(`${relative}: ${label}`);
+  for (const finding of inspectSensitiveText(content)) findings.push(`${relative}: ${finding}`);
 }
 
 const lockPath = path.join(root, 'skills', 'sp-pachong-seo-wenzhang-caiji', 'scripts', 'package-lock.json');

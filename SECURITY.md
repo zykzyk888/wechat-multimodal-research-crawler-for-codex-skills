@@ -31,3 +31,7 @@ These safeguards support bounded local research. They do not make the CLI a hard
 - The public audit rejects missing license metadata and GPL/AGPL/LGPL/SSPL/BUSL/UNLICENSED matches in the Node lock boundary.
 - CI runs syntax, offline behavior, Skill metadata, sensitive-content, and dependency audits.
 - Optional Crawl4AI should run in an isolated environment and must not expose an unauthenticated remote API.
+
+## Public-release privacy gate
+
+Every release checks both the current tree and full reachable Git history for credentials, private paths, personal contact identifiers, signed source URLs, captured/generated article artifacts, unreviewed media, and non-noreply Git identities. Binary media is denied by default; an exception requires an explicit allowlist plus rights and metadata review. See [the privacy release gate](docs/privacy-release-gate.md).

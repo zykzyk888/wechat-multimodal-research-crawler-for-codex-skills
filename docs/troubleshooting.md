@@ -13,6 +13,8 @@ npm.cmd test
 
 Puppeteer uses an installed Chrome because the project depends on `puppeteer-core`. Pass `--chrome-path` or set `PUPPETEER_EXECUTABLE_PATH` for the current process. Do not commit the machine-specific path.
 
+Automatic discovery covers standard Windows locations, macOS system/user application bundles, and common Linux executable paths. Run `node scripts/test-platform-support.mjs --require-browser` from a repository clone to verify the current machine without opening a page.
+
 The default `auto` route still preserves valid HTTP/Crawlee output if Chrome is unavailable.
 
 ## CAPTCHA or public search challenge
@@ -50,6 +52,8 @@ Then run `finalize` and `validate` again.
 ## Crawl4AI is not installed
 
 It is optional. Create an isolated Python environment and install `scripts/requirements-crawl4ai.txt`. The main article package does not depend on Crawl4AI.
+
+Use `python3` on macOS/Linux and `python` on Windows unless your local installation exposes a different command.
 
 ## Position disagrees with WeChat App
 

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/zykzyk888/wechat-multimodal-research-crawler-for-codex-skills/security/advisories/new
+    about: Report exploitable details privately; never publish credentials or captured material in an Issue.
+  - name: Usage and troubleshooting
+    url: https://github.com/zykzyk888/wechat-multimodal-research-crawler-for-codex-skills/blob/main/docs/troubleshooting.md
+    about: Check documented installation, Chrome, source, and quality-gate limits first.

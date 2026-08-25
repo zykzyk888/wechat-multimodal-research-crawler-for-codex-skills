@@ -54,25 +54,61 @@ The raw Mermaid source is [workflow.mmd](../workflows/research-material-acquisit
 
 ## Atomic crawler/image flow
 
-```mermaid
-flowchart LR
-    Q["topics, count or public URLs"] --> A1["A | Sogou discovery"]
-    A1 --> A2["A | Crawlee + HTTP/Cheerio"]
-    A2 --> G{"A | body/table/image gates"}
-    G -->|body failure| P["A | targeted Puppeteer"]
-    G -->|complex structure| C["A | optional Crawl4AI sidecar"]
-    G -->|pass| K["A | ordered article package"]
-    P --> K
-    C --> K
-    K --> H1(["H | image ID, local path, context, output path"])
-    H1 --> B["B | OCR, claims, data, relationships"]
-    B --> H2(["H | validated analysis JSON reference"])
-    H2 --> F["A | finalize + validate"]
+<!-- two-skill-flow:start -->
 
-    classDef default fill:#F3F4F6,stroke:#64748B,color:#0F172A;
+```mermaid
+flowchart TD
+    subgraph LEGEND["图例｜颜色 + 前缀共同表达归属"]
+        direction LR
+        LA["A Skill｜爬虫 SEO 文章采集"]:::skillA
+        LB["B Skill｜图片理解信息提取"]:::skillB
+        LH(["H 交接合同｜只传路径、上下文、状态与 JSON 引用"]):::handoff
+    end
+
+    X["外部输入｜关键词、数量或公开文章 URL"]:::external
+    A1["A1｜微信搜狗发现与相关性排序"]:::skillA
+    A2["A2｜Crawlee 调度 + HTTP/Cheerio 快速抓取"]:::skillA
+    A3{"A3｜正文质量门"}:::skillA
+    A4["A4｜Puppeteer 动态兜底"]:::skillA
+    A5["A5｜正文块规范化"]:::skillA
+    A6["A6｜Crawl4AI 可选结构增强"]:::skillA
+    A7["A7｜正文处理"]:::skillA
+    A8{"A8｜表格类型"}:::skillA
+    A9["A9｜正文图片注册、筛选与下载"]:::skillA
+    A10["A10｜原生 HTML 表格解析为 JSON + Markdown"]:::skillA
+    H1(["H1｜image_id + 本地路径 + 上下文 + output_path"]):::handoff
+    B1["B1｜图片价值判断 + OCR + 观点 + 数据关系"]:::skillB
+    H2(["H2｜analysis JSON 引用；A 负责最终回写"]):::handoff
+    A11["A11｜完整文章包装配"]:::skillA
+    A12{"A12｜完整性与证据校验"}:::skillA
+    O["交付｜SEO / GEO / 产品 / 研究消费者"]:::external
+    R["按失败维度定向重试"]:::external
+    Q["人工复核｜挑战、冲突或关键证据不可读"]:::external
+
+    X --> A1 --> A2 --> A3
+    A3 -->|正文缺失 / 过短 / 标题不符| A4 --> A5
+    A3 -->|正文通过| A5
+    A2 -->|检测到表格或复杂结构| A6 --> A5
+    A5 --> A7 --> A11
+    A5 --> A8
+    A5 --> A9
+    A8 -->|原生 HTML 表格| A10 --> A11
+    A8 -->|图片型表格| H1
+    A9 --> H1 --> B1 --> H2 --> A11
+    A11 --> A12
+    A12 -->|通过| O
+    A12 -->|局部失败| R --> A3
+    A12 -->|验证阻塞 / 事实冲突| Q
+
+    classDef skillA fill:#E8F1FF,stroke:#2563EB,stroke-width:2px,color:#0F172A;
+    classDef skillB fill:#EAF8F0,stroke:#16A34A,stroke-width:2px,color:#0F172A;
+    classDef handoff fill:#FFF4D6,stroke:#D97706,stroke-width:2px,color:#0F172A;
+    classDef external fill:#F3F4F6,stroke:#64748B,stroke-width:1.5px,color:#0F172A;
 ```
 
-The detailed ownership figure is maintained in [two-skill-integration-flow.md](../skills/sp-pachong-seo-wenzhang-caiji/references/two-skill-integration-flow.md).
+<!-- two-skill-flow:end -->
+
+The machine source is [two-skill-flow.mmd](../workflows/research-material-acquisition/two-skill-flow.mmd). CI keeps this rendering synchronized with [two-skill-integration-flow.md](../skills/sp-pachong-seo-wenzhang-caiji/references/two-skill-integration-flow.md) and the README.
 
 ## Why adapters are not separate Skills
 

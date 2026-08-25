@@ -10,12 +10,14 @@ Turn keywords or public `mp.weixin.qq.com` URLs into deterministic multimodal ar
 ## Before running
 
 1. Resolve this Skill's directory as `<skill-root>`.
-2. Require Node.js 20 or newer.
+2. Require Node.js 20.18.1 or newer on Windows, macOS, or Linux.
 3. If `<skill-root>/scripts/node_modules` is missing, run:
 
-```powershell
-npm.cmd ci --prefix "<skill-root>/scripts"
+```bash
+npm ci --prefix "<skill-root>/scripts"
 ```
+
+On Windows PowerShell, use `npm.cmd` if `npm.ps1` is blocked.
 
 4. Lock the requested topics and per-topic count, or the exact public URL denominator.
 5. Use a task-local output directory outside the Skill source tree.
@@ -32,25 +34,25 @@ For accountable multi-topic batches, use `$sp-role-pachong-ziliao-sousuo-caiji-e
 
 Discover public Sogou Weixin results:
 
-```powershell
+```bash
 node "<skill-root>/scripts/pachong-seo.mjs" discover --topics SEO,GEO --top-k 7 --pages 3 --output "<run-root>"
 ```
 
 Capture discovered public articles with the default quality-gated route:
 
-```powershell
+```bash
 node "<skill-root>/scripts/pachong-seo.mjs" capture --input "<run-root>/sources.json" --output "<run-root>" --engine auto
 ```
 
 Offline-package retained HTML:
 
-```powershell
+```bash
 node "<skill-root>/scripts/pachong-seo.mjs" package-html --html "<file.html>" --url "https://mp.weixin.qq.com/s/example" --output "<article-package>"
 ```
 
 After image analyses exist:
 
-```powershell
+```bash
 node "<skill-root>/scripts/pachong-seo.mjs" finalize --input "<article-package>"
 node "<skill-root>/scripts/pachong-seo.mjs" validate --input "<article-package>"
 ```
@@ -110,6 +112,7 @@ Pass only `image_id`, local path, nearby context, profile, and output path to `$
 - Do not use login state, user cookies, proxies with credentials, private networks, `.env`, CAPTCHA solving, or access-control bypass.
 - Stop on CAPTCHA, login, private, paid, prohibited, or security-challenge paths.
 - Raw HTML and downloaded images belong in the user's local output, not in this open-source repository or a downstream public corpus.
+- Standard installed-Chrome paths are discovered on Windows, macOS, and Linux; use `--chrome-path` or `PUPPETEER_EXECUTABLE_PATH` only as a task-local override and never commit it.
 - Respect applicable terms, robots guidance, copyright, privacy, rate limits, and the user's right to collect and reuse each source.
 
 ## References

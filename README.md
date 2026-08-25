@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/zykzyk888/wechat-multimodal-research-crawler-for-codex-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/zykzyk888/wechat-multimodal-research-crawler-for-codex-skills/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Node.js 20+](https://img.shields.io/badge/Node.js-20%2B-43853D.svg)](package.json)
+[![Node.js 20.18.1+](https://img.shields.io/badge/Node.js-20.18.1%2B-43853D.svg)](package.json)
 [![Codex Skills](https://img.shields.io/badge/Codex-3%20installable%20Skills-2563EB.svg)](#方式一直接安装到-codex推荐)
 
 面向 Codex 的微信公开搜索与多模态研究工具：把关键词或公开文章链接转化为包含**有序正文、原生表格、正文图片、图片知识和来源证据**的研究资料包。
@@ -107,6 +107,12 @@ node bin/research-harvester.mjs validate --input ./runs/seo-geo/article-package/
 
 完整步骤见 [快速上手](docs/quickstart.md)，常见失败见 [故障排查](docs/troubleshooting.md)。
 
+## Windows、macOS 与 Linux
+
+不需要为苹果电脑维护另一套仓库或 Skill：同一份 Node.js 代码支持 Windows、macOS 和 Linux，并自动发现各平台已安装的 Chrome。GitHub Actions 分别在 Windows x64、macOS Apple Silicon、macOS Intel 和 Ubuntu x64 运行锁文件安装、离线功能、Skill、完整 Git 历史脱敏和浏览器路径验证。
+
+这是 Codex/CLI 的**桌面配套工具**，不是 iPhone/iPad App；iOS/iPadOS 不能在本地执行这套 Node + Chrome 流程。命令差异、Chrome 路径和证据边界见 [平台支持矩阵](docs/platform-support.md)。
+
 ## 三个 Codex Skills
 
 | Skill | 定位 | 唯一写入边界 |
@@ -119,20 +125,61 @@ node bin/research-harvester.mjs validate --input ./runs/seo-geo/article-package/
 
 ## 四路不是“四倍重复抓取”
 
+四路是同一篇文章包合同下的**分层调度与定向兜底**：默认先走低成本路径，只有未通过同一质量门的维度才升级或增强。下面的大图直接标明两个原子 Skill 的责任和交接合同。
+
+<!-- two-skill-flow:start -->
+
 ```mermaid
-flowchart LR
-    Q[关键词或公开 URL] --> C[Crawlee 队列与重试]
-    C --> H[HTTP + Cheerio 快速提取]
-    H --> G{正文/标题/挑战质量门}
-    G -->|通过| P[文章包装配]
-    G -->|动态或正文失败| B[Puppeteer 定向兜底]
-    H -->|复杂结构| A[Crawl4AI 可选 sidecar]
-    B --> P
-    A --> P
-    P --> I[图片注册与下载]
-    I --> V[Codex 图片理解]
-    V --> F[finalize + validate]
+flowchart TD
+    subgraph LEGEND["图例｜颜色 + 前缀共同表达归属"]
+        direction LR
+        LA["A Skill｜爬虫 SEO 文章采集"]:::skillA
+        LB["B Skill｜图片理解信息提取"]:::skillB
+        LH(["H 交接合同｜只传路径、上下文、状态与 JSON 引用"]):::handoff
+    end
+
+    X["外部输入｜关键词、数量或公开文章 URL"]:::external
+    A1["A1｜微信搜狗发现与相关性排序"]:::skillA
+    A2["A2｜Crawlee 调度 + HTTP/Cheerio 快速抓取"]:::skillA
+    A3{"A3｜正文质量门"}:::skillA
+    A4["A4｜Puppeteer 动态兜底"]:::skillA
+    A5["A5｜正文块规范化"]:::skillA
+    A6["A6｜Crawl4AI 可选结构增强"]:::skillA
+    A7["A7｜正文处理"]:::skillA
+    A8{"A8｜表格类型"}:::skillA
+    A9["A9｜正文图片注册、筛选与下载"]:::skillA
+    A10["A10｜原生 HTML 表格解析为 JSON + Markdown"]:::skillA
+    H1(["H1｜image_id + 本地路径 + 上下文 + output_path"]):::handoff
+    B1["B1｜图片价值判断 + OCR + 观点 + 数据关系"]:::skillB
+    H2(["H2｜analysis JSON 引用；A 负责最终回写"]):::handoff
+    A11["A11｜完整文章包装配"]:::skillA
+    A12{"A12｜完整性与证据校验"}:::skillA
+    O["交付｜SEO / GEO / 产品 / 研究消费者"]:::external
+    R["按失败维度定向重试"]:::external
+    Q["人工复核｜挑战、冲突或关键证据不可读"]:::external
+
+    X --> A1 --> A2 --> A3
+    A3 -->|正文缺失 / 过短 / 标题不符| A4 --> A5
+    A3 -->|正文通过| A5
+    A2 -->|检测到表格或复杂结构| A6 --> A5
+    A5 --> A7 --> A11
+    A5 --> A8
+    A5 --> A9
+    A8 -->|原生 HTML 表格| A10 --> A11
+    A8 -->|图片型表格| H1
+    A9 --> H1 --> B1 --> H2 --> A11
+    A11 --> A12
+    A12 -->|通过| O
+    A12 -->|局部失败| R --> A3
+    A12 -->|验证阻塞 / 事实冲突| Q
+
+    classDef skillA fill:#E8F1FF,stroke:#2563EB,stroke-width:2px,color:#0F172A;
+    classDef skillB fill:#EAF8F0,stroke:#16A34A,stroke-width:2px,color:#0F172A;
+    classDef handoff fill:#FFF4D6,stroke:#D97706,stroke-width:2px,color:#0F172A;
+    classDef external fill:#F3F4F6,stroke:#64748B,stroke-width:1.5px,color:#0F172A;
 ```
+
+<!-- two-skill-flow:end -->
 
 - Crawlee 是默认批次运行外壳。
 - HTTP + Cheerio 是主要正文/表格/图片解析路径。
@@ -140,7 +187,7 @@ flowchart LR
 - Crawl4AI 只做可选结构增强，不覆盖主文章包。
 - 图片理解是独立 Skill，不塞进四个爬虫适配器。
 
-完整责任标注图见 [架构与流程](docs/architecture.md)。
+图的机器真源是 [`two-skill-flow.mmd`](workflows/research-material-acquisition/two-skill-flow.mmd)，CI 会阻止 README、架构文档和 Skill 附件之间发生漂移。完整 Role/A/B 流程见 [架构与流程](docs/architecture.md)。
 
 ## 输出是什么样
 
@@ -215,7 +262,9 @@ npm run setup
 npm run ci
 ```
 
-`npm run ci` 覆盖：JavaScript 语法、27 项核心运行时断言、完整离线 CLI 冒烟、三项 Skill 元数据和链接、敏感信息/绝对路径/大文件/依赖许可证审计。
+`npm run ci` 覆盖：JavaScript 语法、32 项核心运行时断言、完整离线 CLI 冒烟、跨平台 Chrome 路径、三项 Skill 元数据、全仓本地链接、责任图同步、当前树及完整 Git 历史脱敏、捕获产物/媒体和依赖许可证审计。
+
+发布前隐私判断不是“没有 API Key 就算脱敏”。P0/P1/P2 维度、当前树与历史门、媒体默认拒绝和人工复核清单见 [隐私与公开发布门](docs/privacy-release-gate.md)。
 
 提交规范和新增适配器要求见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 

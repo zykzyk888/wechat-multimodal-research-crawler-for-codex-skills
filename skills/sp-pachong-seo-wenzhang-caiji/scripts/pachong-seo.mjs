@@ -851,16 +851,39 @@ async function captureCrawleeBatch(sources) {
   return map;
 }
 
-async function findChrome(explicitPath) {
-  const candidates = [
-    explicitPath,
-    process.env.PUPPETEER_EXECUTABLE_PATH,
-    process.env.LOCALAPPDATA ? path.join(process.env.LOCALAPPDATA, 'Google', 'Chrome', 'Application', 'chrome.exe') : null,
-    process.env.PROGRAMFILES ? path.join(process.env.PROGRAMFILES, 'Google', 'Chrome', 'Application', 'chrome.exe') : null,
-    process.env['PROGRAMFILES(X86)'] ? path.join(process.env['PROGRAMFILES(X86)'], 'Google', 'Chrome', 'Application', 'chrome.exe') : null,
-  ].filter(Boolean);
+export function chromeExecutableCandidates({
+  explicitPath,
+  platform = process.platform,
+  env = process.env,
+  homeDir = os.homedir(),
+} = {}) {
+  const candidates = [explicitPath, env.PUPPETEER_EXECUTABLE_PATH];
+  if (platform === 'win32') {
+    if (env.LOCALAPPDATA) candidates.push(path.win32.join(env.LOCALAPPDATA, 'Google', 'Chrome', 'Application', 'chrome.exe'));
+    if (env.PROGRAMFILES) candidates.push(path.win32.join(env.PROGRAMFILES, 'Google', 'Chrome', 'Application', 'chrome.exe'));
+    if (env['PROGRAMFILES(X86)']) candidates.push(path.win32.join(env['PROGRAMFILES(X86)'], 'Google', 'Chrome', 'Application', 'chrome.exe'));
+  } else if (platform === 'darwin') {
+    candidates.push(
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      path.posix.join(homeDir, 'Applications', 'Google Chrome.app', 'Contents', 'MacOS', 'Google Chrome'),
+      '/Applications/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing',
+      '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    );
+  } else if (platform === 'linux') {
+    candidates.push(
+      '/usr/bin/google-chrome-stable',
+      '/usr/bin/google-chrome',
+      '/usr/bin/chromium',
+      '/usr/bin/chromium-browser',
+    );
+  }
+  return [...new Set(candidates.filter(Boolean))];
+}
+
+export async function findChromeExecutable(explicitPath) {
+  const candidates = chromeExecutableCandidates({ explicitPath });
   for (const candidate of candidates) if (await fileExists(candidate)) return candidate;
-  throw new Error('Chrome executable not found; pass --chrome-path or PUPPETEER_EXECUTABLE_PATH');
+  throw new Error(`Chrome executable not found on ${process.platform}; pass --chrome-path or PUPPETEER_EXECUTABLE_PATH`);
 }
 
 async function captureBrowserOne(browser, source) {
@@ -920,7 +943,7 @@ async function captureCommand(options) {
           if (!browser && !browserUnavailableError) {
             try {
               browser = await puppeteer.launch({
-                executablePath: await findChrome(options['chrome-path']),
+                executablePath: await findChromeExecutable(options['chrome-path']),
                 headless: true,
                 waitForInitialPage: false,
                 timeout: 60_000,
