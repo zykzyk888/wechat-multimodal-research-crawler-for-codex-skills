@@ -220,7 +220,7 @@ article-package/01/
 - 6 个原生数据表；
 - 未使用付费爬虫 API、登录态、验证码绕过或私有内容。
 
-四路适配器对比的固定 14 篇基准还证明：没有任何单一路线在两轮中稳定覆盖全部文章，因此采用质量门级联。完整方法、分母、得分和限制见 [基准报告](docs/benchmark-report-2026-08-25.md)。公开仓库全新克隆、官方 Skill 安装器和 SEO/GEO 在线烟测见 [v0.1.0 发布验证](docs/release-verification.md)。
+四路适配器对比的固定 14 篇基准还证明：没有任何单一路线在两轮中稳定覆盖全部文章，因此采用质量门级联。完整方法、分母、得分和限制见 [基准报告](docs/benchmark-report-2026-08-25.md)。公开仓库首次克隆、官方 Skill 安装器和 SEO/GEO 在线烟测见 [v0.1.0 发布验证](docs/release-verification.md)；完整历史脱敏、Windows/macOS/Linux 四平台和 GitHub 安全闭环见 [v0.2.0 发布验证](docs/release-verification-v0.2.0.md)。
 
 这些是**有边界的本机实测证据**，不是生产 SLA，也不保证未来页面、反爬策略、文章质量或来源事实长期不变。
 

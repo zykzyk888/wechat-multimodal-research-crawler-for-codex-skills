@@ -6,6 +6,7 @@ export const requiredFiles = [
   'README.md', 'LICENSE', 'SECURITY.md', 'CONTRIBUTING.md', 'package.json',
   'docs/architecture.md', 'docs/benchmark-report-2026-08-25.md', 'docs/compliance.md',
   'docs/privacy-release-gate.md', 'docs/platform-support.md',
+  'docs/release-verification-v0.2.0.md',
   '.github/ISSUE_TEMPLATE/bug_report.yml', '.github/ISSUE_TEMPLATE/feature_request.yml',
   '.github/ISSUE_TEMPLATE/config.yml', '.github/pull_request_template.md',
   'scripts/audit-git-history.mjs', 'scripts/test-platform-support.mjs', 'scripts/validate-diagrams.mjs', 'scripts/validate-docs.mjs',
