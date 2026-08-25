@@ -18,9 +18,9 @@ The final bounded live batch produced four ready-for-research article packages. 
 | Check | Result |
 |---|---|
 | repository visibility | public |
-| independently cloned commit | e617a8052ac30e26a251fcb31e2ba4455a440832 |
+| independently cloned code commit | 370963ab226a946b08b2c2ee70d01439478713d2 |
 | GitHub Actions workflow | completed successfully |
-| workflow evidence | [CI run 32868546604](https://github.com/zykzyk888/wechat-multimodal-research-crawler-for-codex-skills/actions/runs/32868546604) |
+| workflow evidence | [CI run 32870285944](https://github.com/zykzyk888/wechat-multimodal-research-crawler-for-codex-skills/actions/runs/32870285944) |
 
 The GitHub API reported private: false; remote main and the independently cloned HEAD matched exactly.
 
