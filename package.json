@@ -1,6 +1,6 @@
 {
   "name": "wechat-multimodal-research-crawler-for-codex-skills",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "Codex companion for public WeChat search, four-route crawling, multimodal packaging, and image knowledge extraction.",
   "license": "MIT",

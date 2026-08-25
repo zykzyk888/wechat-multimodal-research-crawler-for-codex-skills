@@ -191,10 +191,12 @@ function firstImageUrl($, element, baseUrl) {
   return null;
 }
 
-function tableToMarkdown(table) {
+export function tableToMarkdown(table) {
   if (!table.rows.length) return '';
   const width = Math.max(...table.rows.map((row) => row.cells.length));
-  const rows = table.rows.map((row) => Array.from({ length: width }, (_, index) => cleanText(row.cells[index]?.text || '').replace(/\|/g, '\\|')));
+  const rows = table.rows.map((row) => Array.from({ length: width }, (_, index) => cleanText(row.cells[index]?.text || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/\|/g, '\\|')));
   const header = rows[0];
   const divider = Array.from({ length: width }, () => '---');
   return [header, divider, ...rows.slice(1)].map((row) => `| ${row.join(' | ')} |`).join('\n');

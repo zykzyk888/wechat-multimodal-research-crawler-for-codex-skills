@@ -1,6 +1,6 @@
 {
   "name": "wechat-multimodal-research-crawler-runtime",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "description": "Deterministic public WeChat article discovery, multimodal capture, packaging, and validation runtime.",

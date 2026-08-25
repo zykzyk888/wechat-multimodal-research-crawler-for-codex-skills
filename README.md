@@ -262,7 +262,7 @@ npm run setup
 npm run ci
 ```
 
-`npm run ci` 覆盖：JavaScript 语法、32 项核心运行时断言、完整离线 CLI 冒烟、跨平台 Chrome 路径、三项 Skill 元数据、全仓本地链接、责任图同步、当前树及完整 Git 历史脱敏、捕获产物/媒体和依赖许可证审计。
+`npm run ci` 覆盖：JavaScript 语法、33 项核心运行时断言、完整离线 CLI 冒烟、跨平台 Chrome 路径、三项 Skill 元数据、全仓本地链接、责任图同步、当前树及完整 Git 历史脱敏、捕获产物/媒体和依赖许可证审计。
 
 发布前隐私判断不是“没有 API Key 就算脱敏”。P0/P1/P2 维度、当前树与历史门、媒体默认拒绝和人工复核清单见 [隐私与公开发布门](docs/privacy-release-gate.md)。
 

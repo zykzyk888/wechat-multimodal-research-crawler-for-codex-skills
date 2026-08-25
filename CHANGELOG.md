@@ -2,6 +2,13 @@
 
 All notable project changes are documented here.
 
+## [0.2.1] - 2026-08-26
+
+### Security
+
+- Escape existing backslashes before Markdown table delimiters, closing the high-severity CodeQL `js/incomplete-sanitization` alert without changing the native table JSON source.
+- Add a regression assertion for cells containing both a backslash and a pipe.
+
 ## [0.2.0] - 2026-08-26
 
 ### Added
