@@ -26,3 +26,14 @@ Completion requires evidence for every stage. A local pass without remote and fr
 | 7 | anonymous public-clone install and CI | complete | public clone matched the implementation commit; locked install and `npm run ci` passed |
 
 Detailed evidence and explicit limits are recorded in [v0.2.0 release verification](release-verification-v0.2.0.md).
+
+## v0.2.1 CodeQL closure
+
+| Stage | Requirement | Status | Evidence |
+|---|---|---|---|
+| 1 | reproduce and classify first CodeQL result | complete | alert 1 was a real high-severity incomplete-sanitization finding, not dismissed as a false positive |
+| 2 | minimal deterministic fix and regression | complete | backslash-before-pipe escaping; runtime suite 33/33 |
+| 3 | four-platform regression | complete | [CI run 32884407092](https://github.com/zykzyk888/wechat-multimodal-research-crawler-for-codex-skills/actions/runs/32884407092) passed all matrix jobs |
+| 4 | security re-analysis | complete | [CodeQL run 32884406915](https://github.com/zykzyk888/wechat-multimodal-research-crawler-for-codex-skills/actions/runs/32884406915) passed; alert state `fixed`; open alerts 0 |
+
+Detailed patch evidence is recorded in [v0.2.1 security verification](release-verification-v0.2.1.md).
