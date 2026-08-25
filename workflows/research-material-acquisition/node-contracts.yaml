@@ -1,0 +1,67 @@
+schema_version: 1
+workflow_id: research_material_acquisition
+diagram: workflows/research-material-acquisition/workflow.mmd
+atomic_inner_flow: skills/sp-pachong-seo-wenzhang-caiji/references/two-skill-integration-flow.md
+
+principles:
+  role_skill_id: sp-role-pachong-ziliao-sousuo-caiji-expert
+  one_node_one_owner: true
+  retry_only_failed_dimension: true
+  source_position_truth: observed_sogou_weixin_position_is_not_native_wechat_app_rank
+
+nodes:
+  R1:
+    owner: sp-role-pachong-ziliao-sousuo-caiji-expert
+    output: normalized_run_contract
+    acceptance:
+      - topics and per-topic count or unique public URL denominator are explicit
+      - source surface and observed-position meaning are explicit
+      - visual knowledge completeness is required, optional, or not required
+  R2:
+    owner: sp-role-pachong-ziliao-sousuo-caiji-expert
+    output: run_contract_batch_plan_item_ledger
+  A1:
+    owner: sp-pachong-seo-wenzhang-caiji
+    output: discovery_capture_base_packages_native_tables_images_vision_jobs
+  R3:
+    owner: sp-role-pachong-ziliao-sousuo-caiji-expert
+    output: base_quality_matrix_and_failed_dimension
+  R4:
+    owner: sp-role-pachong-ziliao-sousuo-caiji-expert
+    output: selected_visual_analysis_jobs
+  B1:
+    owner: sp-tupian-lijie-xinxi-tiqu
+    output: per_image_analysis_json
+  A2:
+    owner: sp-pachong-seo-wenzhang-caiji
+    output: finalized_validated_article_packages
+  R5:
+    owner: sp-role-pachong-ziliao-sousuo-caiji-expert
+    output: corpus_quality_matrix_and_retry_or_review_decision
+  R6:
+    owner: sp-role-pachong-ziliao-sousuo-caiji-expert
+    output: delivery_manifest_paths_coverage_unresolved_and_next_action
+
+handoffs:
+  H1:
+    from: sp-role-pachong-ziliao-sousuo-caiji-expert
+    to: sp-pachong-seo-wenzhang-caiji
+    payload: [topics_or_urls, per_topic_count, source_scope, output_root, quality_profile, run_id]
+  H2:
+    from: sp-role-pachong-ziliao-sousuo-caiji-expert
+    to: sp-pachong-seo-wenzhang-caiji
+    payload: [item_id, failed_dimension, package_path, evidence, retry_limit_or_stop]
+  H3:
+    from: sp-role-pachong-ziliao-sousuo-caiji-expert
+    to: sp-tupian-lijie-xinxi-tiqu
+    payload: [vision_jobs, image_ids, local_paths, profile, context, output_paths]
+  H4:
+    from: sp-tupian-lijie-xinxi-tiqu
+    to: sp-pachong-seo-wenzhang-caiji
+    payload: [image_ids, analysis_json_paths, confidence, uncertainties, validation_status]
+
+single_writer_boundaries:
+  run_contract_ledger_manifest: sp-role-pachong-ziliao-sousuo-caiji-expert
+  article_package_tables_images_refs_final_state: sp-pachong-seo-wenzhang-caiji
+  image_analysis_json: sp-tupian-lijie-xinxi-tiqu
+  downstream_synthesis: requesting_domain_owner

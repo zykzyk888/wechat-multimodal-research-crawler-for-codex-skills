@@ -1,0 +1,7 @@
+interface:
+  display_name: "微信多模态文章采集"
+  short_description: "搜索并采集公众号正文、表格和图片资料包"
+  default_prompt: "Use $sp-pachong-seo-wenzhang-caiji to collect public WeChat research articles for this topic, preserve ordered text, native tables and body images, report exact quality states, and hand only registered local images to $sp-tupian-lijie-xinxi-tiqu for semantic analysis."
+
+policy:
+  allow_implicit_invocation: true

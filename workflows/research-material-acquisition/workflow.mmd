@@ -1,0 +1,41 @@
+flowchart TD
+    subgraph LEGEND["图例｜颜色 + 前缀共同表达归属"]
+        direction LR
+        LR["R Role｜爬虫资料搜索采集专家"]:::role
+        LA["A Skill｜爬虫 SEO 文章采集"]:::skillA
+        LB["B Skill｜图片理解信息提取"]:::skillB
+        LH(["H 交接合同｜只传合同、路径、状态与 JSON 引用"]):::handoff
+    end
+
+    X1["外部输入｜用户 / SEO-GEO / 产品 / 市场 / 技术研究需求"]:::external
+    R1["R1｜锁定目标、消费者、主题/URL、分母、来源语义与质量"]:::role
+    R2["R2｜建立 run contract、批次计划与 ledger"]:::role
+    H1(["H1｜交给 A：topics/urls + top_k + source_scope + output_root + quality_profile"]):::handoff
+    A1["A1｜发现、抓取并输出基础文章包 + vision-jobs + 抓取状态"]:::skillA
+    R3{"R3｜基础质量门<br/>正文 / 原生数据表 / 布局表过滤 / 图片注册 / 来源证据"}:::role
+    H2(["H2｜按失败维度退回 A：source/body/table/image_inventory/finalization"]):::handoff
+    Q1{"R4｜是否需要图片知识恢复?"}:::role
+    H3(["H3｜交给 B：vision-jobs + 本地路径 + profile + context + output_path"]):::handoff
+    B1["B1｜图片价值分流、OCR、图表/图片表格、观点与数据关系"]:::skillB
+    H4(["H4｜交回 A：analysis JSON 引用；A finalize 单一回写文章包"]):::handoff
+    A2["A2｜finalize + validate 最终文章包"]:::skillA
+    R5{"R5｜语料完整性与证据校验"}:::role
+    X2["人工复核｜验证码 / 私有付费 / 事实冲突 / 关键图不可读"]:::external
+    R6["R6｜交付 manifest、文章包路径、覆盖率、未完成项与下一步"]:::role
+    X3["外部交付｜SEO / GEO / 产品 / 技术研究消费者"]:::external
+
+    X1 --> R1 --> R2 --> H1 --> A1 --> R3
+    R3 -->|基础维度失败| H2 --> A1
+    R3 -->|基础维度通过| Q1
+    Q1 -->|需要| H3 --> B1 --> H4 --> A2 --> R5
+    Q1 -->|不需要或无正文图片| A2
+    R5 -->|局部可重试：A 维度| H2
+    R5 -->|局部可重试：B 维度| H3
+    R5 -->|验证阻塞 / 事实冲突| X2
+    R5 -->|通过或可解释的部分交付| R6 --> X3
+
+    classDef role fill:#F1ECFF,stroke:#7C3AED,stroke-width:2px,color:#0F172A;
+    classDef skillA fill:#E8F1FF,stroke:#2563EB,stroke-width:2px,color:#0F172A;
+    classDef skillB fill:#EAF8F0,stroke:#16A34A,stroke-width:2px,color:#0F172A;
+    classDef handoff fill:#FFF4D6,stroke:#D97706,stroke-width:2px,color:#0F172A;
+    classDef external fill:#F3F4F6,stroke:#64748B,stroke-width:1.5px,color:#0F172A;

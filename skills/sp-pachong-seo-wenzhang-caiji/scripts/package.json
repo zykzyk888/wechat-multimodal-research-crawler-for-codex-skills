@@ -1,0 +1,19 @@
+{
+  "name": "wechat-multimodal-research-crawler-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic public WeChat article discovery, multimodal capture, packaging, and validation runtime.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node test-pachong-seo.mjs",
+    "check": "node --check pachong-seo.mjs && node --check test-pachong-seo.mjs"
+  },
+  "dependencies": {
+    "@crawlee/cheerio": "3.18.1",
+    "cheerio": "1.1.2",
+    "puppeteer-core": "25.9.0"
+  }
+}

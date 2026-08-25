@@ -1,0 +1,7 @@
+interface:
+  display_name: "微信研究资料采集专家"
+  short_description: "端到端负责公开文章语料范围、路由、质量与交付"
+  default_prompt: "Use $sp-role-pachong-ziliao-sousuo-caiji-expert to turn this public research request into a bounded corpus contract, route collection to $sp-pachong-seo-wenzhang-caiji, route registered local-image analysis to $sp-tupian-lijie-xinxi-tiqu, retry only failed dimensions, and deliver an evidence-ready batch manifest."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,22 @@
+{
+  "name": "wechat-multimodal-research-crawler-for-codex-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Codex companion for public WeChat search, four-route crawling, multimodal packaging, and image knowledge extraction.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "setup": "npm ci --prefix skills/sp-pachong-seo-wenzhang-caiji/scripts",
+    "cli": "node bin/research-harvester.mjs",
+    "check:runtime": "npm run check --prefix skills/sp-pachong-seo-wenzhang-caiji/scripts",
+    "test:runtime": "npm test --prefix skills/sp-pachong-seo-wenzhang-caiji/scripts",
+    "test:offline": "node scripts/test-offline-smoke.mjs",
+    "validate:skills": "node scripts/validate-skills.mjs",
+    "audit:public": "node scripts/audit-public-release.mjs",
+    "check": "npm run check:runtime && node --check bin/research-harvester.mjs && node --check scripts/validate-skills.mjs && node --check scripts/audit-public-release.mjs && node --check scripts/test-offline-smoke.mjs",
+    "test": "npm run test:runtime && npm run test:offline && npm run validate:skills && npm run audit:public",
+    "ci": "npm run check && npm test"
+  }
+}

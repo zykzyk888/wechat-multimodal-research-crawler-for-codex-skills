@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:wechat-multimodal-research-crawler:image-analysis:1.0",
+  "title": "SP Image Analysis V1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "status",
+    "image_id",
+    "source_path",
+    "profile",
+    "information_value",
+    "content_type",
+    "summary",
+    "ocr_text",
+    "extracted_knowledge",
+    "decision",
+    "confidence",
+    "evidence",
+    "uncertainties"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "status": { "enum": ["completed", "failed", "needs_review"] },
+    "image_id": { "type": "string", "minLength": 1 },
+    "source_path": { "type": "string", "minLength": 1 },
+    "source_sha256": { "type": ["string", "null"], "pattern": "^[a-fA-F0-9]{64}$" },
+    "profile": { "enum": ["wechat-research", "social-marketing"] },
+    "information_value": { "enum": ["high", "medium", "low", "decorative", "uncertain"] },
+    "content_type": { "enum": ["photo", "screenshot", "chart", "table-image", "flowchart", "infographic", "illustration", "logo", "qr-code", "divider", "other"] },
+    "summary": { "type": "string" },
+    "ocr_text": { "type": "string" },
+    "extracted_knowledge": {
+      "type": "object",
+      "required": ["claims", "data_points", "relationships"],
+      "properties": {
+        "claims": { "type": "array", "items": { "$ref": "#/$defs/claim" } },
+        "data_points": { "type": "array", "items": { "$ref": "#/$defs/dataPoint" } },
+        "relationships": { "type": "array", "items": { "$ref": "#/$defs/relationship" } }
+      },
+      "additionalProperties": false
+    },
+    "research": { "type": "object" },
+    "marketing": { "type": "object" },
+    "decision": {
+      "type": "object",
+      "required": ["keep_for_downstream", "reason"],
+      "properties": {
+        "keep_for_downstream": { "type": "boolean" },
+        "reason": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "evidence": { "type": "array", "items": { "type": "string" } },
+    "uncertainties": { "type": "array", "items": { "type": "string" } },
+    "error": { "type": "string" }
+  },
+  "$defs": {
+    "claim": {
+      "type": "object",
+      "required": ["text", "evidence", "confidence"],
+      "properties": {
+        "text": { "type": "string" },
+        "evidence": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "dataPoint": {
+      "type": "object",
+      "required": ["label", "value", "evidence", "confidence"],
+      "properties": {
+        "label": { "type": "string" },
+        "value": { "type": ["string", "number"] },
+        "unit": { "type": "string" },
+        "period": { "type": "string" },
+        "series": { "type": "string" },
+        "evidence": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "relationship": {
+      "type": "object",
+      "required": ["from", "to", "type", "evidence", "confidence"],
+      "properties": {
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "type": { "type": "string" },
+        "evidence": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

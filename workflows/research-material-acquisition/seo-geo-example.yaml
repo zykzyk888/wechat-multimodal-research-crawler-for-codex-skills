@@ -1,0 +1,31 @@
+schema_version: 1
+run_id: seo-geo-example
+objective: Build a representative multimodal public-WeChat corpus for later SEO and GEO research.
+consumer:
+  owner: seo_geo_researcher
+  intended_use: compare and synthesize current public article evidence
+mode: topic_discovery
+corpus:
+  topics:
+    - topic: SEO
+      requested_count: 7
+    - topic: GEO
+      requested_count: 7
+  urls: []
+  source_scope: public Sogou Weixin discovery and public mp.weixin.qq.com article pages
+  source_position_semantics: observed Sogou Weixin result order, not native WeChat App search rank
+  language: zh-CN
+  recency: null
+  inclusion_rules:
+    - topic relevance must be explicit
+    - accepted packages must pass the requested body/table/image dimensions
+  exclusion_rules:
+    - duplicate title and publisher identity
+    - login, private, paid, challenged, or prohibited sources
+quality_profile:
+  body_required: true
+  native_data_tables_required_if_present: true
+  body_images_registered_if_present: true
+  informative_images_analyzed_if_required: true
+output_root: ./runs/seo-geo-example
+evidence_level: bounded_real_environment_validation

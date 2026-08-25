@@ -1,0 +1,7 @@
+interface:
+  display_name: "图片理解与信息提取"
+  short_description: "从研究图片和营销素材提取可验证的结构化信息"
+  default_prompt: "Use $sp-tupian-lijie-xinxi-tiqu to visually inspect these registered local images, extract evidence-linked OCR, claims, data and relationships into schema-valid JSON at the specified paths, and never modify the crawler's article package."
+
+policy:
+  allow_implicit_invocation: true

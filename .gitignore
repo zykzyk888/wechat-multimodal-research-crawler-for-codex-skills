@@ -1,0 +1,29 @@
+# Dependencies and virtual environments
+node_modules/
+**/node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Local runs and generated research corpora
+.tmp/
+.codex-tmp/
+runs/
+output/
+article-package/
+**/article-package/
+batch-report.json
+sources.json
+
+# Local credentials and machine state
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
