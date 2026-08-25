@@ -1016,12 +1016,16 @@ async function regressionCommand(options) {
 }
 
 function helpText() {
-  return `WeChat Multimodal Research Crawler for Codex\n\nCommands:\n  discover --topics SEO,GEO --top-k 7 --output DIR\n  capture --input sources.json --output DIR --engine auto|http|crawlee|puppeteer\n  package-html --html FILE --url URL --output DIR [--download-images]\n  finalize --input ARTICLE_PACKAGE_DIR\n  validate --input ARTICLE_PACKAGE_DIR\n  regression --benchmark-root DIR --output DIR\n\nOnline discovery uses public Sogou Weixin pages. Online article capture is restricted to public mp.weixin.qq.com URLs.\n`;
+  return `WeChat Multimodal Research Crawler for Codex\n\nCommands:\n  discover --topics SEO,GEO --top-k 7 --output DIR\n  capture --input sources.json --output DIR --engine auto|http|crawlee|puppeteer\n  package-html --html FILE --url URL --output DIR [--download-images]\n  finalize --input ARTICLE_PACKAGE_DIR\n  validate --input ARTICLE_PACKAGE_DIR\n  regression --benchmark-root DIR --output DIR\n\nGlobal options:\n  -h, --help\n  -v, --version\n\nOnline discovery uses public Sogou Weixin pages. Online article capture is restricted to public mp.weixin.qq.com URLs.\n`;
 }
 
 export async function runCli(argv = process.argv.slice(2)) {
   const { command, options } = parseCli(argv);
-  if (command === 'help' || options.help) return console.log(helpText());
+  if (['help', '--help', '-h'].includes(command) || options.help) return console.log(helpText());
+  if (['version', '--version', '-v'].includes(command)) {
+    const packageJson = JSON.parse(await fs.readFile(path.join(SCRIPT_DIR, 'package.json'), 'utf8'));
+    return console.log(packageJson.version);
+  }
   if (command === 'discover') {
     if (!options.topics || !options.output) throw new Error('discover requires --topics and --output');
     const topics = String(options.topics).split(',').map(cleanText).filter(Boolean);

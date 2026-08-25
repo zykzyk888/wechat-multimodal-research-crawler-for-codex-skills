@@ -26,6 +26,12 @@ try {
   const help = await run(['help']);
   assert.equal(help.code, 0, help.stderr);
   assert.match(help.stdout, /WeChat Multimodal Research Crawler for Codex/);
+  const standardHelp = await run(['--help']);
+  assert.equal(standardHelp.code, 0, standardHelp.stderr);
+  assert.match(standardHelp.stdout, /Global options:/);
+  const version = await run(['--version']);
+  assert.equal(version.code, 0, version.stderr);
+  assert.equal(version.stdout.trim(), '0.1.0');
 
   const packaged = await run([
     'package-html', '--html', fixture,
@@ -47,7 +53,7 @@ try {
   assert.ok(article.blocks.some((block) => block.type === 'table'));
   assert.ok(article.blocks.some((block) => block.type === 'image'));
 
-  console.log(JSON.stringify({ passed: true, checks: 10, external_calls: 0, article_status: article.status }, null, 2));
+  console.log(JSON.stringify({ passed: true, checks: 14, external_calls: 0, article_status: article.status }, null, 2));
 } finally {
   await fs.rm(temporary, { recursive: true, force: true });
 }
