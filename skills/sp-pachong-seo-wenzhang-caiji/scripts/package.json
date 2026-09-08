@@ -14,6 +14,6 @@
   "dependencies": {
     "@crawlee/cheerio": "3.18.1",
     "cheerio": "1.2.0",
-    "puppeteer-core": "25.9.0"
+    "puppeteer-core": "25.10.0"
   }
 }
