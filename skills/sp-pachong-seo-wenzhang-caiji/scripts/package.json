@@ -12,8 +12,8 @@
     "check": "node --check pachong-seo.mjs && node --check test-pachong-seo.mjs"
   },
   "dependencies": {
-    "@crawlee/cheerio": "3.18.1",
+    "@crawlee/cheerio": "3.18.2",
     "cheerio": "1.2.0",
-    "puppeteer-core": "25.9.0"
+    "puppeteer-core": "25.12.0"
   }
 }
